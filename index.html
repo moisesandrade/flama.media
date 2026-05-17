@@ -346,60 +346,53 @@ backToMain.addEventListener('click', () => {
   mainView.classList.remove('hidden');
 });
 
-    // --- ENVÍO CON GOOGLE APPS SCRIPT (CORS OPTIMIZADO) ---
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxwvAHnC9za40VAiwG4pwz_bFkjt-MZLFH25AfQl6l-cxQUyuUUh5ogmYs5VNq2Azn9WA/exec';
+// --- ENVÍO CON GOOGLE APPS SCRIPT ---
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxwvAHnC9za40VAiwG4pwz_bFkjt-MZLFH25AfQl6l-cxQUyuUUh5ogmYs5VNq2Azn9WA/exec';
 
-    const form = document.getElementById('contact-form');
-    const submitBtn = document.getElementById('submit-btn');
-    const feedback = document.getElementById('form-feedback');
+const form = document.getElementById('contact-form');
+const submitBtn = document.getElementById('submit-btn');
+const feedback = document.getElementById('form-feedback');
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Enviando...';
-      feedback.style.display = 'none';
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Enviando...';
+  feedback.style.display = 'none';
 
-      // Usamos URLSearchParams para evitar problemas de CORS con payloads JSON directos
-      const formData = new URLSearchParams();
-      formData.append('name', document.getElementById('name').value.trim());
-      formData.append('email', document.getElementById('email').value.trim());
-      formData.append('phone', document.getElementById('phone').value.trim());
-      formData.append('message', document.getElementById('message').value.trim());
+  const payload = JSON.stringify({
+    name:    document.getElementById('name').value.trim(),
+    email:   document.getElementById('email').value.trim(),
+    phone:   document.getElementById('phone').value.trim(),
+    message: document.getElementById('message').value.trim()
+  });
 
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: formData, // Enviamos como texto de formulario estándar
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        });
-
-        const result = await res.json();
-
-        if (result.status === 'success' || result.result === 'success') {
-          feedback.style.color = '#ff8c38';
-          feedback.textContent = '✦ Mensaje enviado. Nos pondremos en contacto pronto.';
-          feedback.style.display = 'block';
-          form.reset();
-          submitBtn.textContent = 'Enviado ✦';
-        } else {
-          throw new Error(result.message || 'Error en el servidor');
-        }
-
-      } catch (err) {
-        console.error('Error capturado:', err);
-        
-        // NOTA DE DEPURACIÓN: Si el script funciona en Google pero sigue entrando al catch por CORS,
-        // puedes verificar si los datos llegaron a tu Google Sheet a pesar del mensaje.
-        feedback.style.color = 'rgba(255,255,255,0.7)';
-        feedback.textContent = 'Algo falló al enviar. Escríbenos directamente a hola@flama.media';
-        feedback.style.display = 'block';
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Enviar Mensaje';
-      }
+  try {
+    // no-cors es obligatorio — Google Apps Script no devuelve headers CORS.
+    // La respuesta es siempre opaque (no legible), pero el script SÍ se ejecuta en el servidor.
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: payload
     });
+
+    // Si llegamos aquí sin excepción, el envío llegó al servidor
+    feedback.style.color = '#ff8c38';
+    feedback.textContent = '✦ Mensaje enviado. Nos pondremos en contacto pronto.';
+    feedback.style.display = 'block';
+    form.reset();
+    submitBtn.textContent = 'Enviado ✦';
+
+  } catch (err) {
+    feedback.style.color = 'rgba(255,255,255,0.5)';
+    feedback.textContent = 'Sin conexión. Escríbenos directamente a hola@flama.media';
+    feedback.style.display = 'block';
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Enviar Mensaje';
+  }
+});
+
 
 // --- ANIMACIÓN DEL CANVAS DE FUEGO ---
 const canvas = document.getElementById('flame-canvas');
