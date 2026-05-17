@@ -296,11 +296,6 @@
 
   <div id="form-view" class="view-section hidden">
     <form class="contact-form" id="contact-form">
-      <!-- Web3Forms Access Key — generada para hola@flama.media -->
-      <input type="hidden" name="access_key" value="TU_ACCESS_KEY_AQUI">
-      <input type="hidden" name="subject" value="Nuevo Desafío de Marca — FLAMA MEDIA">
-      <input type="hidden" name="from_name" value="FLAMA MEDIA Web">
-      <input type="hidden" name="redirect" value="false">
 
       <div class="form-group">
         <label for="name">Nombre / Compañía</label>
@@ -313,13 +308,18 @@
       </div>
 
       <div class="form-group">
+        <label for="phone">Teléfono <span style="opacity:0.4; font-size:10px; letter-spacing:0.1em;">OPCIONAL</span></label>
+        <input type="tel" id="phone" name="phone" placeholder="+52 55 0000 0000">
+      </div>
+
+      <div class="form-group">
         <label for="message">El desafío de tu marca</label>
         <textarea id="message" name="message" required placeholder="Cuéntanos brevemente qué pieza o estrategia necesitas encender..."></textarea>
       </div>
 
       <div id="form-feedback" style="display:none; font-family:'Helvetica Neue',Arial,sans-serif; font-size:13px; letter-spacing:0.05em; padding: 10px 0;"></div>
 
-      <button type="submit" class="submit-btn" id="submit-btn">Envía la chispa</button>
+      <button type="submit" class="submit-btn" id="submit-btn">Enviar Mensaje</button>
     </form>
 
     <span class="back-link" id="back-to-main">← Volver</span>
@@ -346,7 +346,9 @@ backToMain.addEventListener('click', () => {
   mainView.classList.remove('hidden');
 });
 
-// --- ENVÍO CON WEB3FORMS ---
+// --- ENVÍO CON GOOGLE APPS SCRIPT ---
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzmBRTayXeLg2QN6V42kmXcFukE5EnbsMqsSVO5NB6KjGOGavil2RwywT4B2Gb0nZQB9w/exec';
+
 const form = document.getElementById('contact-form');
 const submitBtn = document.getElementById('submit-btn');
 const feedback = document.getElementById('form-feedback');
@@ -358,26 +360,28 @@ form.addEventListener('submit', async (e) => {
   submitBtn.textContent = 'Enviando...';
   feedback.style.display = 'none';
 
-  const data = new FormData(form);
-  const json = Object.fromEntries(data.entries());
+  const payload = {
+    name:    document.getElementById('name').value.trim(),
+    email:   document.getElementById('email').value.trim(),
+    phone:   document.getElementById('phone').value.trim(),
+    message: document.getElementById('message').value.trim()
+  };
 
   try {
-    const res = await fetch('https://api.web3forms.com/submit', {
+    const res = await fetch(SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(json)
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     });
-    const result = await res.json();
 
-    if (result.success) {
-      feedback.style.color = '#ff8c38';
-      feedback.textContent = '✦ Mensaje enviado. Nos pondremos en contacto pronto.';
-      feedback.style.display = 'block';
-      form.reset();
-      submitBtn.textContent = 'Enviado';
-    } else {
-      throw new Error(result.message || 'Error desconocido');
-    }
+    // no-cors siempre devuelve opaque, asumimos éxito si no lanza error
+    feedback.style.color = '#ff8c38';
+    feedback.textContent = '✦ Mensaje enviado. Nos pondremos en contacto pronto.';
+    feedback.style.display = 'block';
+    form.reset();
+    submitBtn.textContent = 'Enviado ✦';
+
   } catch (err) {
     feedback.style.color = 'rgba(255,255,255,0.5)';
     feedback.textContent = 'Algo falló al enviar. Escríbenos directamente a hola@flama.media';
