@@ -11,7 +11,6 @@
 <meta name="theme-color" content="#ff6a14">
 <link rel="canonical" href="https://flama.media/">
 
-<!-- Open Graph / Facebook / WhatsApp -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://flama.media/">
 <meta property="og:title" content="FLAMA MEDIA — El criterio que falta en las marcas grandes">
@@ -23,7 +22,6 @@
 <meta property="og:locale" content="es_MX">
 <meta property="og:site_name" content="FLAMA MEDIA">
 
-<!-- Twitter / X Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://flama.media/">
 <meta name="twitter:title" content="FLAMA MEDIA — El criterio que falta en las marcas grandes">
@@ -31,7 +29,6 @@
 <meta name="twitter:image" content="https://flama.media/og-image.jpg">
 <meta name="twitter:image:alt" content="FLAMA MEDIA — Branding estratégico y producción audiovisual">
 
-<!-- Schema.org JSON-LD -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -69,7 +66,7 @@
     align-items: center;
     justify-content: center;
     font-family: 'Georgia', serif;
-    overflow: hidden;
+    overflow-x: hidden;
     position: relative;
   }
 
@@ -89,6 +86,9 @@
     gap: 2.5rem;
     padding: 2rem;
     text-align: center;
+    width: 100%;
+    max-width: 600px;
+    transition: opacity 0.4s ease, transform 0.4s ease;
   }
 
   .logo-wrap {
@@ -116,6 +116,25 @@
     border: 1px solid rgba(255,106,20,0.4);
     padding: 6px 20px;
     border-radius: 2px;
+  }
+
+  /* Contenedores con animaciones fluidas */
+  .view-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    width: 100%;
+    animation: fadeIn 0.6s ease forwards;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .slogan {
@@ -147,7 +166,7 @@
     background: linear-gradient(90deg, transparent, rgba(255,106,20,0.6), transparent);
   }
 
-  .cta-btn {
+  .cta-btn, .submit-btn {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     font-size: 12px;
     font-weight: 600;
@@ -164,14 +183,72 @@
     display: inline-block;
   }
 
-  .cta-btn:hover {
+  .cta-btn:hover, .submit-btn:hover {
     background: #ff8c38;
     box-shadow: 0 0 28px rgba(255,106,20,0.55);
     transform: translateY(-1px);
   }
 
-  .cta-btn:active {
-    transform: translateY(0);
+  /* Estilos del Formulario */
+  .contact-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: left;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group label {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .form-group input, .form-group textarea {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid rgba(255, 106, 20, 0.25);
+    padding: 12px 16px;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 2px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    outline: none;
+    width: 100%;
+  }
+
+  .form-group input:focus, .form-group textarea:focus {
+    border-color: #ff6a14;
+    box-shadow: 0 0 10px rgba(255, 106, 20, 0.2);
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 90px;
+  }
+
+  .back-link {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    cursor: pointer;
+    margin-top: -0.5rem;
+  }
+
+  .back-link:hover {
+    color: #ff6a14;
   }
 
   .footer-tag {
@@ -207,29 +284,71 @@
 
   <div class="badge">Branding · Estrategia · Producción Audiovisual</div>
 
-  <p class="slogan">
-    Veinte años de instinto humano.<br>
-    <strong>El alma que ningún algoritmo puede replicar.</strong>
-  </p>
+  <div id="main-view" class="view-section">
+    <p class="slogan">
+      Veinte años de instinto humano.<br>
+      <strong>El alma que ningún algoritmo puede replicar.</strong>
+    </p>
 
-  <div class="divider"></div>
+    <div class="divider"></div>
+    <p class="coming-soon-label">Próximamente</p>
+    <div class="divider"></div>
 
-  <p class="coming-soon-label">Próximamente</p>
+    <button class="cta-btn" id="open-form-btn">Enciende la llama</button>
+  </div>
 
-  <div class="divider"></div>
+  <div id="form-view" class="view-section hidden">
+    <form class="contact-form" action="TU_ENDPOINT_AQUÍ" method="POST">
+      <div class="form-group">
+        <label for="name">Nombre / Compañía</label>
+        <input type="text" id="name" name="name" required placeholder="Ej. Agencia o Marca">
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <input type="email" id="email" name="email" required placeholder="nombre@empresa.com">
+      </div>
+      
+      <div class="form-group">
+        <label for="message">El desafío de tu marca</label>
+        <textarea id="message" name="message" required placeholder="Cuéntanos brevemente qué pieza o estrategia necesitas encender..."></textarea>
+      </div>
 
-  <a class="cta-btn" href="mailto:hola@flama.media">Enciende la llama</a>
+      <button type="submit" class="submit-btn">Enviar Mensaje</button>
+    </form>
+
+    <span class="back-link" id="back-to-main">← Volver</span>
+  </div>
 
 </div>
 
 <div class="footer-tag">FLAMA MEDIA © 2026 — El criterio que falta</div>
 
 <script>
+// --- CONTROL DE LA INTERFAZ (Cambio de vistas) ---
+const mainView = document.getElementById('main-view');
+const formView = document.getElementById('form-view');
+const openFormBtn = document.getElementById('open-form-btn');
+const backToMain = document.getElementById('back-to-main');
+
+openFormBtn.addEventListener('click', () => {
+  mainView.classList.add('hidden');
+  formView.classList.remove('hidden');
+});
+
+backToMain.addEventListener('click', () => {
+  formView.classList.add('hidden');
+  mainView.classList.remove('hidden');
+});
+
+
+// --- ANIMACIÓN DE PARTÍCULAS (Canvas original) ---
 const canvas = document.getElementById('flame-canvas');
 const ctx = canvas.getContext('2d');
 
 let W, H;
 let particles = [];
+let embers = [];
 
 function resize() {
   W = canvas.width = window.innerWidth;
@@ -239,9 +358,7 @@ window.addEventListener('resize', resize);
 resize();
 
 class Particle {
-  constructor(x) {
-    this.reset(x);
-  }
+  constructor(x) { this.reset(x); }
   reset(x) {
     this.x = x !== undefined ? x : (W * 0.3 + Math.random() * W * 0.4);
     this.y = H + 10;
@@ -311,8 +428,6 @@ class Ember {
   }
 }
 
-let embers = [];
-
 function spawnBatch() {
   const cx = W * 0.25 + Math.random() * W * 0.5;
   const count = 1 + Math.floor(Math.random() * 2);
@@ -326,7 +441,6 @@ let spawnTimer = 0;
 function loop() {
   requestAnimationFrame(loop);
   ctx.clearRect(0, 0, W, H);
-
   ctx.fillStyle = 'rgba(10,10,10,0.22)';
   ctx.fillRect(0, 0, W, H);
 
@@ -341,8 +455,6 @@ function loop() {
   }
 }
 loop();
-
-
 </script>
 </body>
 </html>
