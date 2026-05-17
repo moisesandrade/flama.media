@@ -347,7 +347,7 @@ backToMain.addEventListener('click', () => {
 });
 
 // --- ENVÍO CON GOOGLE APPS SCRIPT ---
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzmBRTayXeLg2QN6V42kmXcFukE5EnbsMqsSVO5NB6KjGOGavil2RwywT4B2Gb0nZQB9w/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxwvAHnC9za40VAiwG4pwz_bFkjt-MZLFH25AfQl6l-cxQUyuUUh5ogmYs5VNq2Azn9WA/exec';
 
 const form = document.getElementById('contact-form');
 const submitBtn = document.getElementById('submit-btn');
@@ -370,19 +370,23 @@ form.addEventListener('submit', async (e) => {
   try {
     const res = await fetch(SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
 
-    // no-cors siempre devuelve opaque, asumimos éxito si no lanza error
-    feedback.style.color = '#ff8c38';
-    feedback.textContent = '✦ Mensaje enviado. Nos pondremos en contacto pronto.';
-    feedback.style.display = 'block';
-    form.reset();
-    submitBtn.textContent = 'Enviado ✦';
+    const result = await res.json();
+
+    if (result.status === 'success') {
+      feedback.style.color = '#ff8c38';
+      feedback.textContent = '✦ Mensaje enviado. Nos pondremos en contacto pronto.';
+      feedback.style.display = 'block';
+      form.reset();
+      submitBtn.textContent = 'Enviado ✦';
+    } else {
+      throw new Error(result.message || 'Error en el servidor');
+    }
 
   } catch (err) {
+    console.error(err);
     feedback.style.color = 'rgba(255,255,255,0.5)';
     feedback.textContent = 'Algo falló al enviar. Escríbenos directamente a hola@flama.media';
     feedback.style.display = 'block';
