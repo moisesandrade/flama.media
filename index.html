@@ -66,8 +66,11 @@ body {
   color: var(--fg);
   font-family: 'Satoshi', sans-serif;
   overflow-x: hidden;
-  cursor: none;
+  cursor: auto;
   transition: background .4s, color .4s;
+}
+@media (pointer: fine) {
+  body { cursor: none; }
 }
 
 /* ════════════════════════════════════════════
@@ -79,6 +82,7 @@ body {
   pointer-events: none; z-index: 9999;
   transform: translate(-50%,-50%);
   transition: opacity .2s;
+  display: none;
 }
 #cur-ring {
   position: fixed; width: 26px; height: 26px;
@@ -87,10 +91,14 @@ body {
   pointer-events: none; z-index: 9998;
   transform: translate(-50%,-50%);
   transition: width .25s ease, height .25s ease, border-color .25s;
+  display: none;
 }
 #cur-ring.big {
   width: 42px; height: 42px;
   border-color: rgba(230,51,41,.85);
+}
+@media (pointer: fine) {
+  #cur-dot, #cur-ring { display: block; }
 }
 
 /* ════════════════════════════════════════════
@@ -402,7 +410,7 @@ body {
   position: relative; z-index: 1;
 }
 .srv-grid {
-  display: grid; grid-template-columns: repeat(3,1fr);
+  display: grid; grid-template-columns: repeat(4,1fr);
   position: relative; z-index: 1;
 }
 .srv {
@@ -895,9 +903,6 @@ footer {
      SEO & META TAGS — FLAMA MEDIA
 ═══════════════════════════════════════════════ -->
 
-<!-- Favicon llama -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230D0D0D'/><path d='M50 8c1-3 3-6 4-9 2-5 3-10 1-15-1 0-1 1-1 1 0 2-1 3-1 4-1 3-2 6-3 9-1 2-1 4-1 6-1 3-1 4-1 6 0 0 1-1 1-1 0-1 0-2 1-1zM43 20c1-2 1-4 1-6 1-6 2-10 3-14-1 0-2 0-2 1-1 3-2 6-3 9-1 2-2 4-4 6-2 3-3 6-4 9-1 6-2 10-3 15 0 1 0 2 1 3 1 0 1 0 1-1 4-2 6-6 6-10 0-2 0-3 0-4 0 0 0 0 0 0 1 3 1 5 0 8 0 1 0 1 1 1 0 0 1 0 1-1zM62 5c0-1-1-1-1-2-1 0-1 0-1 0 0 1 1 1 1 2 1 2 3 5 4 9 1 3 2 6 3 9 0 0-1 0-1-1-1-2-3-5-5-9-2-3-3-6-3-9 0 0-1-1-1-1-1 0-1 1-1 1-1 5-1 8 0 12 1 2 1 5 2 7 1 4 2 7 3 10 1 4 2 7 3 10 0 1 0 2 0 4 0 2 0 3 1 5 0 0 1 0 1-2 1-2 1-5 2-8 0-1 0-3 0-5 0 0 0 0 0 0 1 2 1 5 1 7 0 0 0 1 1 0 0 0 1 0 0-1-1-3-1-5-1-14-1-3-2-7-4-13C62 8 62 6 62 5z' fill='%23E63329'/></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230D0D0D'/><path d='M50 8c1-3 3-6 4-9 2-5 3-10 1-15-1 0-1 1-1 1 0 2-1 3-1 4-1 3-2 6-3 9-1 2-1 4-1 6-1 3-1 4-1 6 0 0 1-1 1-1 0-1 0-2 1-1zM43 20c1-2 1-4 1-6 1-6 2-10 3-14-1 0-2 0-2 1-1 3-2 6-3 9-1 2-2 4-4 6-2 3-3 6-4 9-1 6-2 10-3 15 0 1 0 2 1 3 1 0 1 0 1-1 4-2 6-6 6-10 0-2 0-3 0-4 0 0 0 0 0 0 1 3 1 5 0 8 0 1 0 1 1 1 0 0 1 0 1-1zM62 5c0-1-1-1-1-2-1 0-1 0-1 0 0 1 1 1 1 2 1 2 3 5 4 9 1 3 2 6 3 9 0 0-1 0-1-1-1-2-3-5-5-9-2-3-3-6-3-9 0 0-1-1-1-1-1 0-1 1-1 1-1 5-1 8 0 12 1 2 1 5 2 7 1 4 2 7 3 10 1 4 2 7 3 10 0 1 0 2 0 4 0 2 0 3 1 5 0 0 1 0 1-2 1-2 1-5 2-8 0-1 0-3 0-5 0 0 0 0 0 0 1 2 1 5 1 7 0 0 0 1 1 0 0 0 1 0 0-1-1-3-1-5-1-14-1-3-2-7-4-13C62 8 62 6 62 5z' fill='%23E63329'/></svg>">
 <meta name="theme-color" content="#E63329">
 
 <!-- SEO Core -->
@@ -1053,11 +1058,13 @@ footer {
     <span>Brand Ignition</span><span class="sep">·</span>
     <span>Creative Direction</span><span class="sep">·</span>
     <span>Cinematic AI Production</span><span class="sep">·</span>
+    <span>UX/UI Design</span><span class="sep">·</span>
     <span>El criterio que falta</span><span class="sep">·</span>
     <span>CDMX · Santiago de Chile · Madrid</span><span class="sep">·</span>
     <span>Brand Ignition</span><span class="sep">·</span>
     <span>Creative Direction</span><span class="sep">·</span>
     <span>Cinematic AI Production</span><span class="sep">·</span>
+    <span>UX/UI Design</span><span class="sep">·</span>
     <span>El criterio que falta</span><span class="sep">·</span>
     <span>CDMX · Santiago de Chile · Madrid</span><span class="sep">·</span>
   </div>
@@ -1078,9 +1085,7 @@ footer {
 ════════════════════════════════════════ -->
 <section id="portada">
 
-  <video id="hero-video" autoplay muted loop playsinline
-    src="reel_flama.mp4" poster="">
-  </video>
+  <video id="hero-video" autoplay muted loop playsinline poster=""></video>
   <div id="hero-grad"></div>
   <div class="vid-note" id="vidNote"> Cargando reel de Flama Media </div>
 
@@ -1293,6 +1298,19 @@ footer {
       </div>
     </div>
 
+    <div class="srv r" style="transition-delay:.3s">
+      <div class="srv-n">04</div>
+      <div>
+        <div class="t2x">UX/UI<br>Design</div>
+        <div class="srv-quote">"Diseñamos experiencias. No solo pantallas."</div>
+        <p class="t3" style="max-width:28ch">
+          Interfaces de producto, sistemas de diseño y arquitectura de experiencia.
+          Criterio creativo aplicado a lo digital.
+        </p>
+        <div class="srv-precio">Por proyecto o retainer · A consultar</div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1387,28 +1405,30 @@ footer {
 </footer>
 
 <script>
-/* ── CURSOR ─────────────────────────────── */
-const dot  = document.getElementById('cur-dot');
-const ring = document.getElementById('cur-ring');
-let mx = innerWidth/2, my = innerHeight/2;
-let rx = mx, ry = my;
+/* ── CURSOR — solo en dispositivos con mouse (pointer: fine) ── */
+if (window.matchMedia('(pointer: fine)').matches) {
+  const dot  = document.getElementById('cur-dot');
+  const ring = document.getElementById('cur-ring');
+  let mx = innerWidth/2, my = innerHeight/2;
+  let rx = mx, ry = my;
 
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
 
-(function loop(){
-  dot.style.left  = mx + 'px';
-  dot.style.top   = my + 'px';
-  rx += (mx - rx) * 0.11;
-  ry += (my - ry) * 0.11;
-  ring.style.left = rx + 'px';
-  ring.style.top  = ry + 'px';
-  requestAnimationFrame(loop);
-})();
+  (function loop(){
+    dot.style.left  = mx + 'px';
+    dot.style.top   = my + 'px';
+    rx += (mx - rx) * 0.11;
+    ry += (my - ry) * 0.11;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(loop);
+  })();
 
-document.querySelectorAll('a, button, .srv, .pregunta, .ignite-btn').forEach(el => {
-  el.addEventListener('mouseenter', () => ring.classList.add('big'));
-  el.addEventListener('mouseleave', () => ring.classList.remove('big'));
-});
+  document.querySelectorAll('a, button, .srv, .pregunta, .ignite-btn').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('big'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('big'));
+  });
+}
 
 /* ── THEME ──────────────────────────────── */
 const html       = document.documentElement;
@@ -1421,11 +1441,41 @@ themeBtn.addEventListener('click', () => {
   themeLabel.textContent = dark ? 'LIGHT' : 'DARK';
 });
 
-/* ── VIDEO ──────────────────────────────── */
-const vid  = document.getElementById('hero-video');
-const note = document.getElementById('vidNote');
-vid.addEventListener('canplay', () => { if(note) note.style.display='none'; });
-vid.addEventListener('error',   () => { vid.style.display='none'; });
+/* ── VIDEO — responsive por ancho real de ventana ── */
+(function() {
+  var vid  = document.getElementById('hero-video');
+  var note = document.getElementById('vidNote');
+  var BREAK = 769;
+  var currentSrc = '';
+
+  function getExpectedSrc() {
+    return window.innerWidth >= BREAK
+      ? 'reel_flama_desktop.mp4'
+      : 'reel_flama_mobile.mp4';
+  }
+
+  function loadVideo() {
+    var expected = getExpectedSrc();
+    if (expected === currentSrc) return; // ya está cargado el correcto
+    currentSrc = expected;
+    vid.src = expected;
+    vid.load();
+    vid.play().catch(function(){});
+  }
+
+  vid.addEventListener('canplay', function() { if(note) note.style.display='none'; });
+  vid.addEventListener('error',   function() { vid.style.display='none'; });
+
+  // Cargar al inicio
+  loadVideo();
+
+  // Swap al redimensionar (debounced)
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(loadVideo, 300);
+  });
+})();
 
 /* ── REVEAL ─────────────────────────────── */
 const ro = new IntersectionObserver(entries => {
