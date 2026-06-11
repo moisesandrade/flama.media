@@ -1,0 +1,52 @@
+# FLAMA MEDIA · .htaccess
+# Apache — optimización SEO y rendimiento
+
+# ─── Redirigir HTTP → HTTPS ───────────────────────────────
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ─── Redirigir www → no-www (o viceversa, elige uno) ──────
+# Descomenta el bloque que prefieras:
+
+# Forzar CON www:
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=301,L]
+
+# ─── Evitar acceso a archivos sensibles ───────────────────
+<FilesMatch "(\.env|\.git|\.htpasswd|composer\.json|package\.json)">
+  Require all denied
+</FilesMatch>
+
+# ─── Caché del navegador ──────────────────────────────────
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html                  "access plus 1 hour"
+  ExpiresByType text/css                   "access plus 1 month"
+  ExpiresByType application/javascript     "access plus 1 month"
+  ExpiresByType image/png                  "access plus 6 months"
+  ExpiresByType image/jpeg                 "access plus 6 months"
+  ExpiresByType image/webp                 "access plus 6 months"
+  ExpiresByType image/svg+xml              "access plus 6 months"
+  ExpiresByType font/woff                  "access plus 1 year"
+  ExpiresByType font/woff2                 "access plus 1 year"
+  ExpiresByType application/font-woff      "access plus 1 year"
+</IfModule>
+
+# ─── Compresión GZIP ──────────────────────────────────────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript
+  AddOutputFilterByType DEFLATE application/json application/xml
+  AddOutputFilterByType DEFLATE font/woff font/woff2
+</IfModule>
+
+# ─── Headers de seguridad (bonus SEO/confianza) ───────────
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# ─── Página de error personalizada ───────────────────────
+ErrorDocument 404 /index.html

@@ -1,0 +1,31 @@
+# FLAMA MEDIA · robots.txt
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://www.flama.media/sitemap.xml
+
+# Bloquear recursos innecesarios para crawlers
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+Disallow: /.env
+Disallow: /.git/
+
+# Crawl delay recomendado para bots agresivos
+Crawl-delay: 10
+
+# IA Search engines — permitir indexación
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
