@@ -1937,14 +1937,16 @@ document.getElementById('waBtn').href = 'https://wa.me/' + WA + '?text=' + MSG;
   <div class="reel-modal__box">
     <button class="reel-modal__close" onclick="closeReelModal()" aria-label="Cerrar">✕</button>
     <div class="reel-modal__video">
-      <iframe id="reelFrame"
-        src=""
-        data-src="https://youtu.be/X1y0VEsF8qA?autoplay=1&rel=0&modestbranding=1"
+      <video id="reelFrame"
+        controls
+        playsinline
+        preload="none"
+        poster="assets/reel-poster.png"
         title="FLAMA MEDIA — Reel 2026"
-        frameborder="0"
-        allow="autoplay; encrypted-media; picture-in-picture"
-        allowfullscreen>
-      </iframe>
+        style="width:100%; height:100%;">
+        <source data-src="assets/video/flama-reel-2026.mp4" type="video/mp4">
+        Tu navegador no soporta reproducción de video HTML5.
+      </video>
     </div>
   </div>
 </div>
@@ -1953,20 +1955,27 @@ document.getElementById('waBtn').href = 'https://wa.me/' + WA + '?text=' + MSG;
 function closeReelModal() {
   var modal = document.getElementById('reelModal');
   modal.classList.remove('open');
-  var frame = document.getElementById('reelFrame');
-  frame.src = '';
+  var video = document.getElementById('reelFrame');
+  video.pause();
+  video.currentTime = 0;
+  video.removeAttribute('src');
+  video.querySelector('source').removeAttribute('src');
+  video.load();
 }
 document.getElementById('reelModal').addEventListener('click', function(e){
   if(e.target === this) closeReelModal();
 });
-// Reactivate iframe src on open
+// Cargar y reproducir el video al abrir el modal
 var observer = new MutationObserver(function(mutations){
   mutations.forEach(function(m){
     var modal = document.getElementById('reelModal');
-    var frame = document.getElementById('reelFrame');
+    var video = document.getElementById('reelFrame');
+    var source = video.querySelector('source');
     if(modal.classList.contains('open')){
-      if(!frame.src || frame.src === window.location.href) {
-        frame.src = frame.getAttribute('data-src');
+      if(!source.src) {
+        source.src = source.getAttribute('data-src');
+        video.load();
+        video.play().catch(function(err){ console.warn('Autoplay bloqueado:', err); });
       }
     }
   });
